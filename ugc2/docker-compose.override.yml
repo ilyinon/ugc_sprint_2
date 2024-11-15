@@ -1,0 +1,4 @@
+services:
+  ugc2:
+    ports: !override
+      - "8021:8000"

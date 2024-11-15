@@ -1,0 +1,23 @@
+services:
+
+  nginx:
+    image: nginx:1.27.0-alpine
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/app.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - static:/opt/app/static
+      - media:/opt/app/media
+    ports:
+      - "80:80"
+    command: [nginx-debug, '-g', 'daemon off;']
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+
+volumes:
+  media:
+  static:
