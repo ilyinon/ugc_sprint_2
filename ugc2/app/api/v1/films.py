@@ -8,7 +8,6 @@ from service.films import FilmService, get_films_service
 
 security = HTTPBearer()
 
-
 router = APIRouter()
 
 

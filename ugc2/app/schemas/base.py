@@ -15,7 +15,7 @@ class OrjsonBaseModel(BaseModel):
 
 
 class Film(BaseModel):
-    film_id: str = Field(..., example="36eab1fb-47b3-4866-bc07-7db766e8de3e")
+    film_id: str = Field(...)
     likes: int = 0
     dislikes: int = 0
     ratings: Optional[List[str]] = None
@@ -26,7 +26,7 @@ class FilmRating(BaseModel):
 
 
 class Bookmark(BaseModel):
-    film_id: str = Field(..., example="film_123")
+    film_id: str = Field(...)
 
 
 class UserBookmark(BaseModel):
@@ -35,7 +35,7 @@ class UserBookmark(BaseModel):
 
 
 class Like(BaseModel):
-    film_id: str = Field(..., example="film_123")
+    film_id: str = Field(...)
 
 
 class UserLike(BaseModel):

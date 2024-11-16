@@ -8,7 +8,6 @@ DOTENV = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..", ".env"
 
 logging_config.dictConfig(LOGGING)
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -27,7 +26,7 @@ class UgcSettings2(BaseSettings):
     mongo_collection_like: str = "user_likes"
     mongo_collection_film: str = "film"
 
-    authjwt_secret_key: str
+    authjwt_secret_key: str = "example"
     authjwt_algorithm: str = "HS256"
 
     log_level: bool = False

@@ -5,7 +5,6 @@ LOG_DEFAULT_HANDLERS = [
     "console",
 ]
 
-
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -58,7 +57,6 @@ LOGGING = {
         "handlers": LOG_DEFAULT_HANDLERS,
     },
 }
-
 
 logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
 logger = logging.getLogger(__name__)

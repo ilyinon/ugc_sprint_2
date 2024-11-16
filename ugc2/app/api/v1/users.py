@@ -7,7 +7,6 @@ from service.users import UserService, get_users_service
 
 security = HTTPBearer()
 
-
 router = APIRouter()
 
 
