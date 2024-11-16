@@ -1,7 +1,7 @@
-from motor.motor_asyncio import AsyncIOMotorClient
+from functools import lru_cache
 
 from core.config import ugc2_settings
-from functools import lru_cache
+from motor.motor_asyncio import AsyncIOMotorClient
 
 
 @lru_cache()

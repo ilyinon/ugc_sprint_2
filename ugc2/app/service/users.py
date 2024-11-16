@@ -1,9 +1,10 @@
 from functools import lru_cache
-from db.mongo import get_db
-from fastapi import HTTPException, status, Depends
-from schemas.base import UserBookmark, UserLike
-from motor.motor_asyncio import AsyncIOMotorClient
+
 from core.config import ugc2_settings
+from db.mongo import get_db
+from fastapi import Depends, HTTPException, status
+from motor.motor_asyncio import AsyncIOMotorClient
+from schemas.base import UserBookmark, UserLike
 
 
 class UserService:
