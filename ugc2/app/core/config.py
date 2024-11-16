@@ -8,7 +8,6 @@ DOTENV = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..", ".env"
 
 logging_config.dictConfig(LOGGING)
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 

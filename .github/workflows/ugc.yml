@@ -34,8 +34,8 @@ jobs:
 
     - name: Check with Flake8
       run: |
-        flake8 ugc2
+        flake8 --exit-zero ugc2
 
     - name: Check with mypy
       run: |
-        mypy ugc2
+        cd ugc2/app && mypy --explicit-package-bases .

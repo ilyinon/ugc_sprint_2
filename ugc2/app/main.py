@@ -10,6 +10,5 @@ app = FastAPI(
     default_response_class=ORJSONResponse,
 )
 
-
 app.include_router(users.router, prefix="/api/v1")
 app.include_router(films.router, prefix="/api/v1")
