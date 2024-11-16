@@ -30,4 +30,12 @@ jobs:
 
     - name: Check sort imports with isort
       run: |
-        isort --check-only .
+        isort --check-only ugc2
+
+    - name: Check with Flake8
+      run: |
+        flake8 ugc2
+
+    - name: Check with mypy
+      run: |
+        mypy ugc2
