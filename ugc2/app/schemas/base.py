@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import List, Optional
 
 import orjson
 from pydantic import BaseModel, Field
@@ -18,10 +18,11 @@ class Film(BaseModel):
     film_id: str = Field(..., example="36eab1fb-47b3-4866-bc07-7db766e8de3e")
     likes: int = 0
     dislikes: int = 0
+    ratings: Optional[List[str]] = None
 
 
-class Rating(BaseModel):
-    rating: int = Field(..., ge=1, le=10, example=7)
+class FilmRating(BaseModel):
+    rating: float
 
 
 class Bookmark(BaseModel):

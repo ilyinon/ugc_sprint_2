@@ -1,9 +1,8 @@
 import os
 from logging import config as logging_config
 
-from pydantic_settings import BaseSettings, SettingsConfigDict
-
 from core.logger import LOGGING
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 DOTENV = os.path.abspath(os.path.join(os.path.dirname(__file__), "../..", ".env"))
 
@@ -26,6 +25,7 @@ class UgcSettings2(BaseSettings):
     mongo_db_name: str = "ugc"
     mongo_collection_bookmark: str = "user_bookmark"
     mongo_collection_like: str = "user_likes"
+    mongo_collection_film: str = "film"
 
     authjwt_secret_key: str
     authjwt_algorithm: str = "HS256"
