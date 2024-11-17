@@ -39,3 +39,11 @@ jobs:
     - name: Check with mypy
       run: |
         cd ugc2/app && mypy --explicit-package-bases .
+
+    - name: Send Telegram notification on success
+      if: success() # Only run if the previous steps were successful
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        message: "✅ Build successful for ${{ github.repository }} (${{ github.ref }})"
