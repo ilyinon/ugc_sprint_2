@@ -3,7 +3,6 @@ from uuid import uuid4
 
 import jwt as jwt_auth
 from core.config import ugc2_settings
-from core.logger import logger
 
 user_data = {
     "user_id": str(uuid4()),
@@ -27,7 +26,6 @@ def create_token(user_data):
         key=ugc2_settings.authjwt_secret_key,
         algorithm=ugc2_settings.authjwt_algorithm,
     )
-    logger.info("Token is generated")
     return token
 
 

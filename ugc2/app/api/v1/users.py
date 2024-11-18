@@ -1,3 +1,5 @@
+import logging
+
 import jwt
 from core.config import ugc2_settings
 from fastapi import APIRouter, Depends, Security, status
@@ -38,6 +40,8 @@ async def add_bookmark(
     user_service: UserService = Depends(get_users_service),
     payload: dict = Depends(verify_jwt),
 ):
+    logging.info(f"{payload["user_id"]} is adding {film_id} to bookmarks")
+
     return await user_service.add_bookmark(payload["user_id"], film_id)
 
 
@@ -52,6 +56,7 @@ async def remove_bookmark(
     user_service: UserService = Depends(get_users_service),
     payload: dict = Depends(verify_jwt),
 ):
+    logging.info(f"{payload["user_id"]} is deleting {film_id} to bookmarks")
     return await user_service.delete_bookmark(payload["user_id"], film_id)
 
 
