@@ -6,16 +6,16 @@ filebeat.inputs:
   json:
     keys_under_root: true
     add_error_key: true
+  tags: ['nginx']
 
-# filebeat.inputs:
-# - type: filestream
-#   enabled: true
-#   paths:
-#     - /logs/nginx/*
-#   json:
-#     keys_under_root: true
-#     add_error_key: true
-#   tags: ['nginx']
+- type: filestream
+  enabled: true
+  paths:
+    - /logs/ugc/*
+  json:
+    keys_under_root: true
+    add_error_key: true
+  tags: ['ugc']
 
 
 output.logstash:

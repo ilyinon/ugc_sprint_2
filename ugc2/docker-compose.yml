@@ -5,6 +5,8 @@ services:
     env_file:
       - ./.env
     restart: unless-stopped
+    volumes:
+      - ./logs/ugc/:/opt/app/logs/:rw
     healthcheck:
       test: bash -c "exec 6<> /dev/tcp/localhost/8000"
       interval: 5s

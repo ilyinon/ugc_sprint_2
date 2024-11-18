@@ -44,6 +44,7 @@ services:
       - /var/lib/docker/containers:/var/lib/docker/containers
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ../logs/nginx/:/logs/nginx/:ro
+      - ../logs/ugc/:/logs/ugc/:ro
     depends_on:
       - logstash
 
