@@ -1,0 +1,22 @@
+filebeat.inputs:
+- type: filestream
+  enabled: true
+  paths:
+    - /logs/nginx/*
+  json:
+    keys_under_root: true
+    add_error_key: true
+
+# filebeat.inputs:
+# - type: filestream
+#   enabled: true
+#   paths:
+#     - /logs/nginx/*
+#   json:
+#     keys_under_root: true
+#     add_error_key: true
+#   tags: ['nginx']
+
+
+output.logstash:
+  hosts: ["logstash:5000"]

@@ -1,0 +1,86 @@
+2024/11/17 22:47:52 [notice] 1#1: using the "epoll" event method
+2024/11/17 22:47:52 [notice] 1#1: nginx/1.27.0
+2024/11/17 22:47:52 [notice] 1#1: built by gcc 13.2.1 20231014 (Alpine 13.2.1_git20231014)
+2024/11/17 22:47:52 [notice] 1#1: OS: Linux 6.10.4-linuxkit
+2024/11/17 22:47:52 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2024/11/17 22:47:52 [notice] 1#1: start worker processes
+2024/11/17 22:47:52 [notice] 1#1: start worker process 20
+2024/11/17 22:47:52 [notice] 1#1: start worker process 21
+2024/11/17 22:47:52 [notice] 1#1: start worker process 22
+2024/11/17 22:47:52 [notice] 1#1: start worker process 23
+2024/11/17 22:47:52 [notice] 1#1: start worker process 24
+2024/11/17 22:47:52 [notice] 1#1: start worker process 25
+2024/11/17 22:47:52 [notice] 1#1: start worker process 26
+2024/11/17 22:47:52 [notice] 1#1: start worker process 27
+2024/11/17 22:47:52 [notice] 1#1: start worker process 28
+2024/11/17 22:47:52 [notice] 1#1: start worker process 29
+2024/11/17 23:02:11 [notice] 1#1: signal 3 (SIGQUIT) received, shutting down
+2024/11/17 23:02:11 [notice] 20#20: gracefully shutting down
+2024/11/17 23:02:11 [notice] 21#21: gracefully shutting down
+2024/11/17 23:02:11 [notice] 23#23: gracefully shutting down
+2024/11/17 23:02:11 [notice] 22#22: gracefully shutting down
+2024/11/17 23:02:11 [notice] 24#24: gracefully shutting down
+2024/11/17 23:02:11 [notice] 26#26: gracefully shutting down
+2024/11/17 23:02:11 [notice] 24#24: exiting
+2024/11/17 23:02:11 [notice] 27#27: gracefully shutting down
+2024/11/17 23:02:11 [notice] 25#25: gracefully shutting down
+2024/11/17 23:02:11 [notice] 29#29: gracefully shutting down
+2024/11/17 23:02:11 [notice] 28#28: gracefully shutting down
+2024/11/17 23:02:11 [notice] 20#20: exiting
+2024/11/17 23:02:11 [notice] 21#21: exiting
+2024/11/17 23:02:11 [notice] 29#29: exiting
+2024/11/17 23:02:11 [notice] 23#23: exiting
+2024/11/17 23:02:11 [notice] 22#22: exiting
+2024/11/17 23:02:11 [notice] 26#26: exiting
+2024/11/17 23:02:11 [notice] 27#27: exiting
+2024/11/17 23:02:11 [notice] 25#25: exiting
+2024/11/17 23:02:11 [notice] 28#28: exiting
+2024/11/17 23:02:11 [notice] 29#29: exit
+2024/11/17 23:02:11 [notice] 24#24: exit
+2024/11/17 23:02:11 [notice] 23#23: exit
+2024/11/17 23:02:11 [notice] 20#20: exit
+2024/11/17 23:02:11 [notice] 21#21: exit
+2024/11/17 23:02:11 [notice] 22#22: exit
+2024/11/17 23:02:11 [notice] 27#27: exit
+2024/11/17 23:02:11 [notice] 26#26: exit
+2024/11/17 23:02:11 [notice] 28#28: exit
+2024/11/17 23:02:11 [notice] 25#25: exit
+2024/11/17 23:02:11 [notice] 1#1: signal 17 (SIGCHLD) received from 24
+2024/11/17 23:02:11 [notice] 1#1: worker process 24 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: signal 29 (SIGIO) received
+2024/11/17 23:02:11 [notice] 1#1: signal 17 (SIGCHLD) received from 23
+2024/11/17 23:02:11 [notice] 1#1: worker process 20 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: worker process 23 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: signal 29 (SIGIO) received
+2024/11/17 23:02:11 [notice] 1#1: signal 17 (SIGCHLD) received from 28
+2024/11/17 23:02:11 [notice] 1#1: worker process 28 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: signal 29 (SIGIO) received
+2024/11/17 23:02:11 [notice] 1#1: signal 17 (SIGCHLD) received from 26
+2024/11/17 23:02:11 [notice] 1#1: worker process 22 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: worker process 26 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: worker process 29 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: signal 29 (SIGIO) received
+2024/11/17 23:02:11 [notice] 1#1: signal 17 (SIGCHLD) received from 22
+2024/11/17 23:02:11 [notice] 1#1: worker process 21 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: signal 29 (SIGIO) received
+2024/11/17 23:02:11 [notice] 1#1: signal 17 (SIGCHLD) received from 21
+2024/11/17 23:02:11 [notice] 1#1: signal 17 (SIGCHLD) received from 27
+2024/11/17 23:02:11 [notice] 1#1: worker process 25 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: worker process 27 exited with code 0
+2024/11/17 23:02:11 [notice] 1#1: exit
+2024/11/17 23:02:12 [notice] 1#1: using the "epoll" event method
+2024/11/17 23:02:12 [notice] 1#1: nginx/1.27.0
+2024/11/17 23:02:12 [notice] 1#1: built by gcc 13.2.1 20231014 (Alpine 13.2.1_git20231014)
+2024/11/17 23:02:12 [notice] 1#1: OS: Linux 6.10.4-linuxkit
+2024/11/17 23:02:12 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+2024/11/17 23:02:12 [notice] 1#1: start worker processes
+2024/11/17 23:02:12 [notice] 1#1: start worker process 20
+2024/11/17 23:02:12 [notice] 1#1: start worker process 21
+2024/11/17 23:02:12 [notice] 1#1: start worker process 22
+2024/11/17 23:02:12 [notice] 1#1: start worker process 23
+2024/11/17 23:02:12 [notice] 1#1: start worker process 24
+2024/11/17 23:02:12 [notice] 1#1: start worker process 25
+2024/11/17 23:02:12 [notice] 1#1: start worker process 26
+2024/11/17 23:02:12 [notice] 1#1: start worker process 27
+2024/11/17 23:02:12 [notice] 1#1: start worker process 28
+2024/11/17 23:02:12 [notice] 1#1: start worker process 29

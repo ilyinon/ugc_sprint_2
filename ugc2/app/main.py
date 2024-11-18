@@ -1,8 +1,17 @@
+import logging
+
 import sentry_sdk
 from api.v1 import films, users
 from core.config import ugc2_settings
+from core.logger import fastapi_logger
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
+
+gunicorn_error_logger = logging.getLogger("gunicorn.error")
+gunicorn_error_logger.addHandler(fastapi_logger)
+gunicorn_access_logger = logging.getLogger("gunicorn.access")
+gunicorn_access_logger.addHandler(fastapi_logger)
+
 
 sentry_sdk.init(
     dsn="https://c6e15651de424b3321b89771c9ec00bb@o4508310740598784.ingest.de.sentry.io/4508310743941200",

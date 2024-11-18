@@ -1,62 +1,26 @@
 import logging
+import logging.handlers
 
-LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-LOG_DEFAULT_HANDLERS = [
-    "console",
-]
+from fastapi.logger import logger as fastapi_logger
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "verbose": {"format": LOG_FORMAT},
-        "default": {
-            "()": "uvicorn.logging.DefaultFormatter",
-            "fmt": "%(levelprefix)s %(message)s",
-            "use_colors": None,
-        },
-        "access": {
-            "()": "uvicorn.logging.AccessFormatter",
-            "fmt": "%(levelprefix)s %(client_addr)s - '%(request_line)s' %(status_code)s",
-        },
-    },
-    "handlers": {
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "verbose",
-        },
-        "default": {
-            "formatter": "default",
-            "class": "logging.StreamHandler",
-            "stream": "ext://sys.stdout",
-        },
-        "access": {
-            "formatter": "access",
-            "class": "logging.StreamHandler",
-            "stream": "ext://sys.stdout",
-        },
-    },
-    "loggers": {
-        "": {
-            "handlers": LOG_DEFAULT_HANDLERS,
-            "level": "INFO",
-        },
-        "uvicorn.error": {
-            "level": "INFO",
-        },
-        "uvicorn.access": {
-            "handlers": ["access"],
-            "level": "INFO",
-            "propagate": False,
-        },
-    },
-    "root": {
-        "level": "INFO",
-        "formatter": "verbose",
-        "handlers": LOG_DEFAULT_HANDLERS,
-    },
-}
+logging.basicConfig(
+    filename="logs/fastapi.log",  # Log file name
+    level=logging.INFO,  # Set minimum logging level
+    format="%(asctime)s - %(levelname)s - %(message)s",  # Log format
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
 
-logging.basicConfig(format="%(asctime)s %(levelname)s: %(message)s", level=logging.INFO)
-logger = logging.getLogger(__name__)
+
+handler = logging.FileHandler("logs/fastapi.log")  # Use the same file
+handler.setFormatter(
+    logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+)  # Same log format
+
+console = logging.StreamHandler()
+console.setFormatter(
+    logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+)  # Same log format
+
+
+fastapi_logger.addHandler(handler)
+fastapi_logger.addHandler(console)
