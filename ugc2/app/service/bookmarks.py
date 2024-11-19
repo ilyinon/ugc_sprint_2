@@ -13,7 +13,6 @@ class BookmarkService:
         self.db = db_client[database_name]
         self.collection = self.db[ugc2_settings.mongo_collection_users]
 
-
     async def add_bookmark(self, user_id, film_id):
 
         user_bookmark = await self.collection.find_one({"_id": user_id})

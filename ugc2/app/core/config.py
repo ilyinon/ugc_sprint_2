@@ -24,7 +24,6 @@ class UgcSettings2(BaseSettings):
     mongo_collection_film: str = "film"
     mongo_collection_users: str = "users"
 
-
     authjwt_secret_key: str = "example"
     authjwt_algorithm: str = "HS256"
 

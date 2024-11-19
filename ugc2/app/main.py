@@ -61,5 +61,5 @@ for handler in fastapi_logger.handlers:
     handler.addFilter(RequestIDLogFilter())
 
 app.include_router(users.router, prefix="/api/v1/ugc")
-app.include_router(films.router, prefix="/api/v1/ugc", tags = ["film"])
-app.include_router(bookmarks.router, prefix="/api/v1/ugc/bookmarks", tags = ["bookmark"])
+app.include_router(films.router, prefix="/api/v1/ugc", tags=["film"])
+app.include_router(bookmarks.router, prefix="/api/v1/ugc/bookmarks", tags=["bookmark"])
