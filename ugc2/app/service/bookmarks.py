@@ -30,25 +30,38 @@ class BookmarkService:
                     detail="Film already bookmarked.",
                 )
         else:
-            user_bookmark = UserBookmark(user_id=user_id, film_ids=[film_id])
+            user_bookmark = UserBookmark(user_id=user_id, bookmarks=[film_id])
             await self.collection.insert_one({"_id": user_id, "bookmarks": [film_id]})
 
         return {"message": "Bookmark added successfully."}
 
     async def delete_bookmark(self, user_id, film_id):
-        collection = self.db[ugc2_settings.mongo_collection_bookmark]
 
-        user_bookmark = await collection.find_one({"_id": user_id})
+        user_bookmark = await self.collection.find_one({"_id": user_id})
 
-        if user_bookmark and film_id in user_bookmark["film_ids"]:
-            user_bookmark["film_ids"].remove(film_id)
-            await collection.update_one(
-                {"_id": user_id}, {"$set": {"film_ids": user_bookmark["film_ids"]}}
+        if user_bookmark and film_id in user_bookmark["bookmarks"]:
+            user_bookmark["bookmarks"].remove(film_id)
+            await self.collection.update_one(
+                {"_id": user_id}, {"$set": {"bookmarks": user_bookmark["bookmarks"]}}
             )
         else:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Bookmark not found."
             )
+
+    async def get_bookmark(self, user_id):
+
+        user_bookmark = await self.collection.find_one({"_id": user_id})
+        fastapi_logger.info(f"user_bookmark: {user_bookmark}")
+        if user_bookmark:
+            if user_bookmark["bookmarks"]:
+                return user_bookmark["bookmarks"]
+
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Not found bookmarks.",
+        )
+
 
     async def like_film(self, user_id, film_id):
 

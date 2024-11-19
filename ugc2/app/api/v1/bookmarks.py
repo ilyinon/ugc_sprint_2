@@ -61,12 +61,11 @@ async def remove_bookmark(
 
 
 @router.get(
-    "{film_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
+    "/",
+    status_code=status.HTTP_200_OK,
     summary="Get list of bookmarks",
 )
-async def remove_bookmark(
-    film_id: str,
+async def get_bookmark(
     user_service: BookmarkService = Depends(get_bookmarks_service),
     payload: dict = Depends(verify_jwt),
 ):
