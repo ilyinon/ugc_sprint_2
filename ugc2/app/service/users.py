@@ -5,85 +5,76 @@ from db.mongo import get_db
 from fastapi import Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorClient
 from schemas.base import UserBookmark, UserLike
+from core.logger import fastapi_logger
+
 
 
 class UserService:
     def __init__(self, db_client: AsyncIOMotorClient, database_name: str):
         self.db = db_client[database_name]
+        self.collection = self.db[ugc2_settings.mongo_collection_users]
 
-    async def add_bookmark(self, user_id, film_id):
-        collection = self.db[ugc2_settings.mongo_collection_bookmark]
-        user_bookmark = await collection.find_one({"user_id": user_id})
-
-        if user_bookmark:
-            if film_id not in user_bookmark["film_ids"]:
-                user_bookmark["film_ids"].append(film_id)
-                await collection.update_one(
-                    {"user_id": user_id},
-                    {"$set": {"film_ids": user_bookmark["film_ids"]}},
-                )
-            else:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Film already bookmarked.",
-                )
-        else:
-            user_bookmark = UserBookmark(user_id=user_id, film_ids=[film_id])
-            await collection.insert_one(user_bookmark.dict())
-
-        return {"message": "Bookmark added successfully."}
-
-    async def delete_bookmark(self, user_id, film_id):
-        collection = self.db[ugc2_settings.mongo_collection_bookmark]
-
-        user_bookmark = await collection.find_one({"user_id": user_id})
-
-        if user_bookmark and film_id in user_bookmark["film_ids"]:
-            user_bookmark["film_ids"].remove(film_id)
-            await collection.update_one(
-                {"user_id": user_id}, {"$set": {"film_ids": user_bookmark["film_ids"]}}
-            )
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Bookmark not found."
-            )
-
-    async def like_film(self, user_id, film_id):
-        collection = self.db[ugc2_settings.mongo_collection_like]
-
-        user_like = await collection.find_one({"user_id": user_id})
+    async def add_like(self, user_id, film_id):
+        user_like = await self.collection.find_one({"_id": user_id})
 
         if user_like:
-            if film_id not in user_like["film_ids"]:
-                user_like["film_ids"].append(film_id)
-                await collection.update_one(
-                    {"user_id": user_id}, {"$set": {"film_ids": user_like["film_ids"]}}
-                )
-            else:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Film already likeed.",
-                )
+            fastapi_logger.info(f"User like exist")
+            if user_like.get("likes"):
+                if film_id not in user_like["likes"]:
+                    fastapi_logger.info(f"Add like")
+
+                    user_like["likes"].append(film_id)
+                    fastapi_logger.info(f"user_like: {user_like}")
+
+                    await self.collection.update_one(
+                        {"_id": user_id},
+                        {"$set": {"likes": user_like["likes"]}},
+                    )
+                else:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Film is already liked.",
+                    )
         else:
-            user_like = UserLike(user_id=user_id, film_ids=[film_id])
-            await collection.insert_one(user_like.dict())
+            fastapi_logger.info(f"gonna add new user")
+            user_like = UserLike(user_id=user_id, likes=[film_id])
+            await self.collection.update_one({"_id": user_id}, 
+                                                {"$set": {"_id": user_id, "likes": [film_id]}},
+                                                upsert=True)
+        fastapi_logger.info(f"ready to exit")
+        return {"message": "Film liked successfully."}
 
-        return {"message": "Like added successfully."}
+    async def delete_like(self, user_id, film_id):
 
-    async def remove_like_film(self, user_id, film_id):
-        collection = self.db[ugc2_settings.mongo_collection_like]
+        user_like = await self.collection.find_one({"_id": user_id})
 
-        user_like = await collection.find_one({"user_id": user_id})
-
-        if user_like and film_id in user_like["film_ids"]:
-            user_like["film_ids"].remove(film_id)
-            await collection.update_one(
-                {"user_id": user_id}, {"$set": {"film_ids": user_like["film_ids"]}}
+        if user_like and film_id in user_like["likes"]:
+            user_like["likes"].remove(film_id)
+            await self.collection.update_one(
+                {"_id": user_id}, {"$set": {"likes": user_like["likes"]}}
             )
         else:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Like not found."
+                status_code=status.HTTP_404_NOT_FOUND, detail="likes not found."
             )
+
+    async def get_likes(self, user_id):
+
+        user_like = await self.collection.find_one({"_id": user_id})
+        fastapi_logger.info(f"user_like: {user_like}")
+        if user_like:
+            if user_like["likes"]:
+                return user_like["likes"]
+
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Not found likes.",
+        )
+
+
+
+
+
 
 
 @lru_cache()

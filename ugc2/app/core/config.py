@@ -19,9 +19,7 @@ class UgcSettings2(BaseSettings):
     mongo_host: str = "mongodb"
 
     mongo_db_name: str = "ugc"
-    mongo_collection_bookmark: str = "user_bookmark"
-    mongo_collection_like: str = "user_likes"
-    mongo_collection_film: str = "film"
+    mongo_collection_film: str = "films"
     mongo_collection_users: str = "users"
 
     authjwt_secret_key: str = "example"

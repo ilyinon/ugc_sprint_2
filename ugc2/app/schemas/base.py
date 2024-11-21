@@ -33,6 +33,9 @@ class UserBookmark(BaseModel):
     user_id: UUID4
     bookmarks: List[UUID4] = []
 
+class UserLike(BaseModel):
+    user_id: UUID4
+    likes: List[UUID4] = []
 
 class Like(BaseModel):
     film_id: UUID4 = Field(...)

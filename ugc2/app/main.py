@@ -3,7 +3,7 @@ import logging
 from uuid import uuid4
 
 import sentry_sdk
-from api.v1 import films, users, bookmarks
+from api.v1 import bookmarks, likes
 from core.config import ugc2_settings
 from core.logger import fastapi_logger
 from fastapi import FastAPI, Request
@@ -60,6 +60,6 @@ async def add_request_id_middleware(request: Request, call_next):
 for handler in fastapi_logger.handlers:
     handler.addFilter(RequestIDLogFilter())
 
-app.include_router(users.router, prefix="/api/v1/ugc")
-app.include_router(films.router, prefix="/api/v1/ugc", tags=["film"])
+app.include_router(likes.router, prefix="/api/v1/ugc/likes", tags=["like"])
+# app.include_router(films.router, prefix="/api/v1/ugc", tags=["film"])
 app.include_router(bookmarks.router, prefix="/api/v1/ugc/bookmarks", tags=["bookmark"])

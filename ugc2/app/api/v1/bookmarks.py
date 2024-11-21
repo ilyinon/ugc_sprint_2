@@ -1,32 +1,19 @@
-import logging
+from core.logger import fastapi_logger
 
-import jwt
+
 from core.config import ugc2_settings
 from fastapi import APIRouter, Depends, Security, status
 from fastapi.exceptions import HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from service.bookmarks import BookmarkService, get_bookmarks_service
+from utils.token import verify_jwt
+from service.auth import AuthService, get_auth_service
 
-security = HTTPBearer()
+get_token = HTTPBearer(auto_error=False)
+
 
 router = APIRouter()
 
-
-async def verify_jwt(credentials: HTTPAuthorizationCredentials = Security(security)):
-    """
-    Verify user's token and get its payload.
-    """
-    try:
-        payload = jwt.decode(
-            credentials.credentials,
-            ugc2_settings.authjwt_secret_key,
-            algorithms=[ugc2_settings.authjwt_algorithm],
-        )
-        return payload
-    except jwt.exceptions.DecodeError:
-        raise HTTPException(status_code=401, detail="Invalid JWT token")
-    except jwt.exceptions.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="JWT token expired")
 
 
 @router.post(
@@ -36,11 +23,13 @@ async def verify_jwt(credentials: HTTPAuthorizationCredentials = Security(securi
 )
 async def add_bookmark(
     film_id: str,
+    access_token: str = Depends(get_token),
     user_service: BookmarkService = Depends(get_bookmarks_service),
-    payload: dict = Depends(verify_jwt),
+    auth_service: AuthService = Depends(get_auth_service),
 ):
-    user_id = payload["user_id"]
-    logging.info(f"{user_id} is adding {film_id} to bookmarks")
+    fastapi_logger.info(f"get the following {access_token}")
+    user_id = await auth_service.verify_jwt(access_token)
+
 
     return await user_service.add_bookmark(user_id, film_id)
 
@@ -52,12 +41,14 @@ async def add_bookmark(
 )
 async def remove_bookmark(
     film_id: str,
+    access_token: str = Depends(get_token),
     user_service: BookmarkService = Depends(get_bookmarks_service),
-    payload: dict = Depends(verify_jwt),
+    auth_service: AuthService = Depends(get_auth_service),
+
 ):
-    user_id = payload["user_id"]
-    logging.info(f"{user_id} is deleting {film_id} to bookmarks")
-    return await user_service.delete_bookmark(payload["user_id"], film_id)
+    user_id = await auth_service.verify_jwt(access_token)
+    fastapi_logger.info(f"{user_id} removes {film_id} from bookmarks")
+    return await user_service.delete_bookmark(user_id, film_id)
 
 
 @router.get(
@@ -66,9 +57,12 @@ async def remove_bookmark(
     summary="Get list of bookmarks",
 )
 async def get_bookmark(
+    access_token: str = Depends(get_token),
     user_service: BookmarkService = Depends(get_bookmarks_service),
     payload: dict = Depends(verify_jwt),
+    auth_service: AuthService = Depends(get_auth_service),
+
 ):
-    user_id = payload["user_id"]
-    logging.info(f"Get list of {user_id} bookmarks")
-    return await user_service.get_bookmark(payload["user_id"])
+    user_id = await auth_service.verify_jwt(access_token)
+    fastapi_logger.info(f"Get list of {user_id} bookmarks")
+    return await user_service.get_bookmark(user_id)
