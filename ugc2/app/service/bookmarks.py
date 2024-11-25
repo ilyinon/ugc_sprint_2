@@ -17,7 +17,7 @@ class BookmarkService:
 
         user_bookmark = await self.collection.find_one({"_id": user_id})
         fastapi_logger.info(f"user_bookmark: {user_bookmark}")
-        if user_bookmark.get("bookmarks"):
+        if user_bookmark and user_bookmark.get("bookmarks"):
             if film_id not in user_bookmark["bookmarks"]:
                 user_bookmark["bookmarks"].append(film_id)
                 await self.collection.update_one(
