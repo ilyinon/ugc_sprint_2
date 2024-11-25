@@ -1,13 +1,7 @@
-import logging
-
-import jwt
-from core.config import ugc2_settings
-from fastapi import APIRouter, Depends, Security, status
-from fastapi.exceptions import HTTPException
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from service.users import UserService, get_users_service
+from fastapi import APIRouter, Depends, status
+from fastapi.security import HTTPBearer
 from service.auth import AuthService, get_auth_service
-from utils.token import verify_jwt
+from service.users import UserService, get_users_service
 
 get_token = HTTPBearer(auto_error=False)
 
@@ -25,7 +19,9 @@ async def add_like(
     user_service: UserService = Depends(get_users_service),
     auth_service: AuthService = Depends(get_auth_service),
 ):
-    return await user_service.add_like(await auth_service.verify_jwt(access_token), film_id)
+    return await user_service.add_like(
+        await auth_service.verify_jwt(access_token), film_id
+    )
 
 
 @router.delete(
@@ -39,7 +35,10 @@ async def remove_like(
     user_service: UserService = Depends(get_users_service),
     auth_service: AuthService = Depends(get_auth_service),
 ):
-    return await user_service.delete_like(await auth_service.verify_jwt(access_token), film_id)
+    return await user_service.delete_like(
+        await auth_service.verify_jwt(access_token), film_id
+    )
+
 
 @router.get(
     "/",

@@ -1,12 +1,11 @@
 from functools import lru_cache
 
 from core.config import ugc2_settings
+from core.logger import fastapi_logger
 from db.mongo import get_db
 from fastapi import Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorClient
-from schemas.base import UserBookmark, UserLike
-from core.logger import fastapi_logger
-
+from schemas.base import UserLike
 
 
 class UserService:
@@ -17,31 +16,27 @@ class UserService:
     async def add_like(self, user_id, film_id):
         user_like = await self.collection.find_one({"_id": user_id})
 
-        if user_like:
-            fastapi_logger.info(f"User like exist")
-            if user_like.get("likes"):
-                if film_id not in user_like["likes"]:
-                    fastapi_logger.info(f"Add like")
+        if user_like.get("likes"):
+            if film_id not in user_like["likes"]:
 
-                    user_like["likes"].append(film_id)
-                    fastapi_logger.info(f"user_like: {user_like}")
+                user_like["likes"].append(film_id)
 
-                    await self.collection.update_one(
-                        {"_id": user_id},
-                        {"$set": {"likes": user_like["likes"]}},
-                    )
-                else:
-                    raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail="Film is already liked.",
-                    )
+                await self.collection.update_one(
+                    {"_id": user_id},
+                    {"$set": {"likes": user_like["likes"]}},
+                )
+            else:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Film is already liked.",
+                )
         else:
-            fastapi_logger.info(f"gonna add new user")
             user_like = UserLike(user_id=user_id, likes=[film_id])
-            await self.collection.update_one({"_id": user_id}, 
-                                                {"$set": {"_id": user_id, "likes": [film_id]}},
-                                                upsert=True)
-        fastapi_logger.info(f"ready to exit")
+            await self.collection.update_one(
+                {"_id": user_id},
+                {"$set": {"_id": user_id, "likes": [film_id]}},
+                upsert=True,
+            )
         return {"message": "Film liked successfully."}
 
     async def delete_like(self, user_id, film_id):
@@ -71,10 +66,32 @@ class UserService:
             detail="Not found likes.",
         )
 
+    async def rate_film(self, user_id, film_id, rating):
+        user_rate = await self.collection.find_one({"_id": user_id})
+        fastapi_logger.info(f"user_rate: {user_rate}")
+        if user_rate:
+            if film_id not in user_rate["ratings"]:
+                user_rate["ratings"][film_id] = rating
 
-
-
-
+                await self.collection.update_one(
+                    {"_id": user_id},
+                    {
+                        "$set": {
+                            "ratings": user_rate["ratings"],
+                        }
+                    },
+                )
+            else:
+                return False
+        else:
+            fastapi_logger.info(f"film_id: {film_id}, ratings: {rating}")
+            await self.collection.insert_one(
+                {
+                    "_id": user_id,
+                    "ratings": {film_id: rating},
+                }
+            )
+        return True
 
 
 @lru_cache()

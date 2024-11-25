@@ -1,14 +1,13 @@
+from functools import lru_cache
+
 import jwt
 from core.config import ugc2_settings
 from fastapi.exceptions import HTTPException
-from functools import lru_cache
-
 
 
 class AuthService:
     def __init__(self):
         pass
-
 
     async def verify_jwt(self, token):
         """
@@ -25,7 +24,6 @@ class AuthService:
             raise HTTPException(status_code=401, detail="Invalid JWT token")
         except jwt.exceptions.ExpiredSignatureError:
             raise HTTPException(status_code=401, detail="JWT token expired")
-
 
 
 @lru_cache()
