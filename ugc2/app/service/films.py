@@ -1,6 +1,7 @@
 from functools import lru_cache
 
 from core.config import ugc2_settings
+from core.logger import fastapi_logger
 from db.mongo import get_db
 from fastapi import Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -12,59 +13,51 @@ class FilmService:
         self.db = db_client[database_name]
         self.collection = self.db[ugc2_settings.mongo_collection_film]
 
-    async def _create_film_if_not_exist(self, film_id):
-        if not await self.collection.find_one({"film_id": film_id}):
-            film = Film(film_id=film_id)
-            await self.collection.insert_one(film.dict())
+    async def rate_film(self, user_id, film_id, rating):
 
-    async def like_film(self, film_id):
-        await self._create_film_if_not_exist(film_id)
+        film_rating = await self.collection.find_one({"_id": film_id})
+        fastapi_logger.info(f"film_rating: {film_rating}")
+        if film_rating:
+            if user_id not in film_rating["ratings"]:
+                film_rating["ratings"][user_id] = rating
 
-        result = await self.collection.update_one(
-            {"film_id": film_id}, {"$inc": {"likes": 1}}
-        )
-        if result.modified_count == 0:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Film not found."
+                all_amount = len(film_rating["ratings"].keys())
+                all_rating = 0
+                for user in film_rating["ratings"].keys():
+                    all_rating += film_rating["ratings"][user]
+
+                average_rating = all_rating / all_amount
+                await self.collection.update_one(
+                    {"_id": film_id},
+                    {
+                        "$set": {
+                            "ratings": film_rating["ratings"],
+                            "rating": average_rating,
+                        }
+                    },
+                )
+            else:
+                return False
+        else:
+            fastapi_logger.info(f"film_id: {film_id}, ratings: {rating}")
+            film_rating = Film(film_id=film_id, ratings={user_id: rating})
+            await self.collection.insert_one(
+                {"_id": film_id, "ratings": {user_id: rating}, "rating": rating}
             )
-        return {"message": "Like added."}
 
-    async def dislike_film(self, film_id):
-        await self._create_film_if_not_exist(film_id)
-
-        result = await self.collection.update_one(
-            {"film_id": film_id}, {"$inc": {"dislikes": 1}}
-        )
-        if result.modified_count == 0:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Film not found."
-            )
-        return {"message": "Dislike added."}
-
-    async def rate_film(self, film_id, rating):
-        await self._create_film_if_not_exist(film_id)
-
-        result = await self.collection.update_one(
-            {"film_id": film_id}, {"$push": {"ratings": rating}}
-        )
-        if result.modified_count == 0:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Film not found."
-            )
-        return {"message": "Rating added."}
+        return True
 
     async def get_film_rate(self, film_id):
-        film = await self.collection.find_one({"film_id": film_id})
-        if not film:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND, detail="Film not found."
-            )
 
-        # Вычисление средней оценки
-        ratings = film.get("ratings", [])
-        if ratings:
-            return {"rating": sum(ratings) / len(ratings)}
-        return None
+        film_rating = await self.collection.find_one({"_id": film_id})
+        fastapi_logger.info(f"film_rating: {film_rating}")
+        if film_rating:
+            if film_rating.get("rating"):
+                return film_rating["rating"]
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Film doesn't have rating yet",
+        )
 
 
 @lru_cache()

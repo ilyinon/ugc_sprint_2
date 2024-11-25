@@ -5,4 +5,5 @@ movies_admin/config/.env
 venv/
 env/
 *.py[cod]
-logs/
+logs/*
+

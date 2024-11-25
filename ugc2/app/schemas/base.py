@@ -1,7 +1,7 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import orjson
-from pydantic import BaseModel, Field
+from pydantic import UUID4, BaseModel, Field, PositiveFloat
 
 
 def orjson_dumps(v, *, default):
@@ -15,10 +15,9 @@ class OrjsonBaseModel(BaseModel):
 
 
 class Film(BaseModel):
-    film_id: str = Field(...)
-    likes: int = 0
-    dislikes: int = 0
-    ratings: Optional[List[str]] = None
+    film_id: UUID4 = Field(...)
+    rating: Optional[PositiveFloat] = None
+    ratings: Optional[Dict[str, int]] = None
 
 
 class FilmRating(BaseModel):
@@ -26,18 +25,18 @@ class FilmRating(BaseModel):
 
 
 class Bookmark(BaseModel):
-    film_id: str = Field(...)
+    film_id: UUID4 = Field(...)
 
 
 class UserBookmark(BaseModel):
-    user_id: str
-    film_ids: List[str] = []
-
-
-class Like(BaseModel):
-    film_id: str = Field(...)
+    user_id: UUID4
+    bookmarks: List[UUID4] = []
 
 
 class UserLike(BaseModel):
-    user_id: str
-    film_ids: List[str] = []
+    user_id: UUID4
+    likes: List[UUID4] = []
+
+
+class Like(BaseModel):
+    film_id: UUID4 = Field(...)
