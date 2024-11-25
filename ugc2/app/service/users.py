@@ -16,7 +16,7 @@ class UserService:
     async def add_like(self, user_id, film_id):
         user_like = await self.collection.find_one({"_id": user_id})
 
-        if user_like.get("likes"):
+        if user_like and user_like.get("likes"):
             if film_id not in user_like["likes"]:
 
                 user_like["likes"].append(film_id)
