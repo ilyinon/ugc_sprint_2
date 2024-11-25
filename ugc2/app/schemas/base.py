@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import orjson
 from pydantic import UUID4, BaseModel, Field, PositiveFloat
@@ -16,8 +16,8 @@ class OrjsonBaseModel(BaseModel):
 
 class Film(BaseModel):
     film_id: UUID4 = Field(...)
-    rating: PositiveFloat = None
-    ratings: Dict[str, int] = None
+    rating: Optional[PositiveFloat] = None
+    ratings: Optional[Dict[str, int]] = None
 
 
 class FilmRating(BaseModel):

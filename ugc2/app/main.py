@@ -19,9 +19,9 @@ class RequestIDLogFilter(logging.Filter):
 
 
 gunicorn_error_logger = logging.getLogger("gunicorn.error")
-gunicorn_error_logger.addHandler(fastapi_logger)
+gunicorn_error_logger.addHandler(fastapi_logger)  # type: ignore[arg-type]
 gunicorn_access_logger = logging.getLogger("gunicorn.access")
-gunicorn_access_logger.addHandler(fastapi_logger)
+gunicorn_access_logger.addHandler(fastapi_logger)  # type: ignore[arg-type]
 
 
 sentry_sdk.init(
