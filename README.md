@@ -5,7 +5,7 @@ https://github.com/ilyinon/ugc_sprint_2
 
 #### Исследование
 Документация по сравнению PostgreSQL и MongoDB  находится в каталоге research
-[research/research.md](research/research.md)
+[research/Research.md](research/Research.md)
 
 
 ####  Запуск проекта
