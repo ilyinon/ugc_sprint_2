@@ -70,3 +70,11 @@ make elk
 
 Пример записи лога в индексе
 ![alt text](images/index_details.png)
+
+
+#### Sentry
+
+Заведена учётная запись на https://sentry.io/
+Добавлено новое приложение, и полученный DSN используется в UGC для отправки данных при эксепшене.
+
+![alt text](images/sentry.png)
