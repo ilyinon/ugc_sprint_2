@@ -1,0 +1,7 @@
+services:
+  mongodb:
+    ports: !override
+      - "27017:27017"
+  mongo-ui:
+    ports: !override
+      - "8081:8081"

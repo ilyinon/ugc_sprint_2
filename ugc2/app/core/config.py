@@ -27,6 +27,12 @@ class UgcSettings2(BaseSettings):
 
     log_level: bool = False
 
+    sentry_enable: bool = True
+    sentry_dsn: str = "https://c6e15651de424b3321b89771c9ec00bb@o4508310740598784.ingest.de.sentry.io/4508310743941200"
+    sentry_traces_sample_rate: float = 1.0
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+
     @property
     def mongo_dsn(self):
         return f"mongodb://{self.mongo_user}:{self.mongo_pass}@{self.mongo_host}:{self.mongo_port}"

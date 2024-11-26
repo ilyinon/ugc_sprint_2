@@ -24,15 +24,14 @@ gunicorn_access_logger = logging.getLogger("gunicorn.access")
 gunicorn_access_logger.addHandler(fastapi_logger)  # type: ignore[arg-type]
 
 
-sentry_sdk.init(
-    dsn="https://c6e15651de424b3321b89771c9ec00bb@o4508310740598784.ingest.de.sentry.io/4508310743941200",
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for tracing.
-    traces_sample_rate=1.0,
-    _experiments={
-        "continuous_profiling_auto_start": True,
-    },
-)
+if ugc2_settings.sentry_enable:
+    sentry_sdk.init(
+        dsn=ugc2_settings.sentry_dsn,
+        traces_sample_rate=ugc2_settings.sentry_traces_sample_rate,
+        _experiments={
+            "continuous_profiling_auto_start": True,
+        },
+    )
 
 app = FastAPI(
     title=ugc2_settings.project_name,
