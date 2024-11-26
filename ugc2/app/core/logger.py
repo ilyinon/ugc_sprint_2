@@ -6,6 +6,10 @@ from fastapi.logger import logger as fastapi_logger
 
 request_id_context = contextvars.ContextVar("request_id", default=None)
 
+LOG_FORMAT = '{"request_id": "%(request_id)s", "asctime": \
+             "%(asctime)s", "levelname": "%(levelname)s", \
+             "name": "%(name)s", "message": "%(message)s"}'
+
 
 class RequestIDLogFilter(logging.Filter):
     def filter(self, record):
@@ -22,14 +26,10 @@ logging.basicConfig(
 
 
 handler = logging.FileHandler("logs/fastapi.log")  # Use the same file
-handler.setFormatter(
-    logging.Formatter("%(asctime)s - %(levelname)s - %(request_id)s - %(message)s")
-)
+handler.setFormatter(logging.Formatter(LOG_FORMAT))
 
 console = logging.StreamHandler()
-console.setFormatter(
-    logging.Formatter("%(asctime)s - %(levelname)s - %(request_id)s - %(message)s")
-)
+console.setFormatter(logging.Formatter(LOG_FORMAT))
 
 
 fastapi_logger.addHandler(handler)
